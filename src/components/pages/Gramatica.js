@@ -3,15 +3,96 @@ import { Link } from 'react-router-dom';
 import Container from '@material-ui/core/Container/Container';
 import Button from '@material-ui/core/Button/Button';
 import { ArrowForward } from '@material-ui/icons';
-import Typography from '@material-ui/core/Typography';
 import Tooltip from "@material-ui/core/Tooltip";
-import { withStyles } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
 
 import RemoveOutlinedIcon from '@material-ui/icons/RemoveOutlined';
 import AddOutlinedIcon from '@material-ui/icons/AddOutlined';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
+
+const styles = {
+    container: {
+        height: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center'
+    },
+    helper: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        marginRight: '10px'
+    },
+    button: {
+        borderRadius: '5px',
+        height: '30px',
+        width: '20px',
+        transitionDuration: '0.5s',
+        marginRight: '10px'
+    },
+    header:
+    {
+        paddingBottom: '15px',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between'
+    },
+    text: {
+        fontSize: '30px',
+        fontFamily: '"Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, AppleGothic, sans-serif',
+        textAlign: 'center',
+        color: '#696969',
+        margin: '0'
+    },
+    text1: {
+        fontFamily: '"Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, AppleGothic, sans-serif',
+        margin: '0',
+        paddingRight: '4px' ,
+        color: '#696969'
+    },
+    footer: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center'
+    },
+    main: {
+        paddingBottom: '20px',
+        margin: '0 auto',
+        display: 'flex',
+        flexFlow: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'center'
+    },
+    item: {
+        padding: '5px',
+    },
+    input: {
+        borderWidth: "3px", 
+        borderColor: "black",
+        backgroundColor: "pink",
+        borderStyle: "solid",
+        borderRadius: "5px",
+        height: "50px",
+        width: "200px",
+        color: '#696969',
+        outline: "0",
+        fontFamily: '"Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, AppleGothic, sans-serif',
+        fontSize: "20px"
+     },
+     input2: {
+         borderWidth: "3px", 
+         borderColor: "black",
+         backgroundColor: "pink",
+         borderStyle: "solid",
+         borderRadius: "5px",
+         color: '#696969',
+         height: "50px",
+         width: "120px",
+         fontFamily: '"Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, AppleGothic, sans-serif',
+         outline: "0",
+         fontSize: "20px"
+      }
+}
 
 const GrammarInput = ({grammar, leftSide, rightSide , cont}) => {
     const [inputs, setInputs] = useState([leftSide, rightSide]);
@@ -69,7 +150,7 @@ export default function Gramatica() {
         { leftSide: 'S', rightSide: 'aS | abB | B' },
         { leftSide: 'B', rightSide: 'cB | λ' }
     ]);
-    const [inputs, setInputs] = useState([1]);
+    const [inputs,] = useState([1]);
 
     const validate = strInput => {
         const str = strInput.target.value;   
@@ -119,22 +200,22 @@ export default function Gramatica() {
             for(let rule of arr[0].rightSide)
             {
                 if(matchD(str, rule, arr)){
-                    strInput.target.style.borderColor = "ForestGreen";
+                    strInput.target.style.borderColor = "Green";
                     return;
                 };
             }
-            strInput.target.style.borderColor = "FireBrick";
+            strInput.target.style.borderColor = "Red";
         } else if(type === 'Left'){
             //console.log('Grammar type: ', type);
             
             for(let rule of arr[0].rightSide)
             {
                 if(matchE(str, rule, arr)){
-                    strInput.target.style.borderColor = "ForestGreen";
+                    strInput.target.style.borderColor = "Green";
                     return;
                 };
             }
-            strInput.target.style.borderColor = "FireBrick";
+            strInput.target.style.borderColor = "Red    ";
         } else {
             //console.log('Error: Invalid Grammar type! Accepted grammars: GLD, GLUD, GLE, GLUE.');
             alert("Gramática inválida! Aceita apenas GLD, GLUD, GLE e GLUE!");
@@ -204,7 +285,7 @@ export default function Gramatica() {
                     <Tooltip title="Voltar"><Button style={styles.button}><ArrowBackIcon color="action"/></Button></Tooltip>
                 </Link>
                 
-                <p style={styles.text}>Gramática regular</p>
+                <p style={styles.text}>Gramática Regular</p>
             </header>
 
             <div style={{width: '100%' }}>
@@ -237,123 +318,21 @@ export default function Gramatica() {
                     <div style={styles.main}>
                         {inputs.map(() => (
                             <div style={styles.item}>
-                                <input type="text" placeholder="String" onChange={(strInput) => validate(strInput)} onClick={(strInput) => {validate(strInput); strInput.target.placeholder = "";}} style={styles.input}/>
+                                <label style={styles.text1}>Teste:</label>
+                                <input type="text" placeholder="Teste" onChange={(strInput) => validate(strInput)} onClick={(strInput) => {validate(strInput); strInput.target.placeholder = "";}} style={styles.input}/>
                             </div>
                         ))}
-                    </div>
-                    <div style={styles.footer}>
-                        <Tooltip title="Adicionar">
-                            <Button style={styles.button} onClick={() => {
-                                if(inputs.length < 10)
-                                    setInputs([...inputs, 1])
-                                }} > <AddOutlinedIcon color="action"/> </Button >
-                        </Tooltip>
-                        <Tooltip title="Remover">
-                            <Button style={styles.button} onClick={() => {
-                                if(inputs.length > 1)
-                                    setInputs(inputs.slice(0, inputs.length-1))
-                                }} > <RemoveOutlinedIcon color="action" /> </Button >
-                        </Tooltip>
                     </div>
                 </div>
             </div>
 
-            <div style={styles.helper}>            
-                <HtmlTooltip placement="top"
-                    title={
-                    <React.Fragment>
-                        <Typography  color="inherit">Gramática regular</Typography>
-                        {'Insira as regras da gramática:'} <br/>
-                        <b>{'S -> a'}</b> {' | '} <b>{'bS'}</b> {' | '} <b>{' λ'}</b> <br/><br/>
-                        <b>{'ATENÇÃO!'}</b><br/> {'  Gramáticas aceitas: GLD, GLUD, GLE e GLUE.'}
-                        <br/> {'  O símbolo de início, será o primeiro da lista de regras.'} <br/>
-                        <br/>{'Em seguida, acrescente as strings para validar.'} <br/>
-                        {'Elas serão validadas quando são clicadas.'}                        
-                    </React.Fragment>
-                    }>
-                    <HelpOutlineIcon color="action" />
-                </HtmlTooltip>
+            <div style={styles.text1}>       
+                <b>{'Limitações:'}</b><br/> {'  Gramáticas aceitas: GLD, GLUD, GLE e GLUE.'}
+                <br/> {'  O símbolo de início, será o primeiro da lista de regras.'} <br/>
+                {'Em seguida, acrescente as strings para validar.'} <br/>
+                {'Elas serão validadas quando são clicadas.'}
             </div>    
         </Container>
     )
 }
 
-const HtmlTooltip = withStyles((theme) => ({
-    tooltip: {
-      backgroundColor: '#f5f5f9',
-      color: 'rgba(0, 0, 0, 0.87)',
-      maxWidth: 420,
-      fontSize: theme.typography.pxToRem(12),
-      border: '1px solid #dadde9',
-    },
-  }))(Tooltip);
-
-const styles = {
-    container: {
-        height: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center'
-    },
-    helper: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'flex-end',
-        marginRight: '10px'
-    },
-    button: {
-        borderRadius: '5px',
-        height: '30px',
-        width: '20px',
-        transitionDuration: '0.5s',
-        marginRight: '10px'
-    },
-    header:
-    {
-        paddingBottom: '15px',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between'
-    },
-    text: {
-        fontSize: '30px',
-        textAlign: 'center',
-        margin: '0'
-    },
-    footer: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'center'
-    },
-    main: {
-        paddingBottom: '20px',
-        margin: '0 auto',
-        display: 'flex',
-        flexFlow: 'row',
-        flexWrap: 'wrap',
-        justifyContent: 'center'
-    },
-    item: {
-        padding: '5px',
-    },
-    input: {
-        borderWidth: "3px", 
-        borderColor: "black",
-        borderStyle: "solid",
-        borderRadius: "5px",
-        height: "50px",
-        width: "200px",
-        outline: "0",
-        fontSize: "20px"
-     },
-     input2: {
-         borderWidth: "3px", 
-         borderColor: "black",
-         borderStyle: "solid",
-         borderRadius: "5px",
-         height: "50px",
-         width: "120px",
-         outline: "0",
-         fontSize: "20px"
-      }
-}
