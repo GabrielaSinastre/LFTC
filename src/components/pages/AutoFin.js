@@ -3,16 +3,67 @@ import { Link } from 'react-router-dom';
 import { Graph } from 'react-d3-graph';
 import Button from '@material-ui/core/Button/Button';
 import Delete from '@material-ui/icons/Delete';
-import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
-import Divider from '@material-ui/core/Divider/Divider';
 import Container from '@material-ui/core/Container/Container';
-import { withStyles } from '@material-ui/core/styles';
 
-import RemoveOutlinedIcon from '@material-ui/icons/RemoveOutlined';
-import AddOutlinedIcon from '@material-ui/icons/AddOutlined';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
+
+const styles = {
+    input: {
+        borderWidth: "3px", 
+        borderColor: "black",
+        borderStyle: "solid",
+        borderRadius: "5px",
+        height: "30px",
+        width: "250px",
+        outline: "0",
+        backgroundColor: "pink",
+        color: '#696969',
+        fontFamily: '"Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, AppleGothic, sans-serif',
+        fontSize: "20px",
+        marginBottom: '10px'
+    },
+    footer: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center'
+    },
+    container: {
+        height: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center'
+    },
+    button: {
+        backgroundColor: "pink",
+        color: '#696969',
+        fontFamily: '"Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, AppleGothic, sans-serif',
+        borderRadius: '5px',
+        height: '30px',
+        width: '20px',
+        transitionDuration: '0.5s',
+        marginRight: '10px'
+    },
+    header: {
+        marginTop: '15px',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between'
+    },
+    text: {
+        marginTop:'10px',
+        fontSize: '30px',
+        textAlign: 'center',
+        color: '#696969',
+        fontFamily: '"Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, AppleGothic, sans-serif',
+        margin: '0'
+    },
+    text1: {
+        color: '#696969',
+        fontFamily: '"Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, AppleGothic, sans-serif',
+        margin: '0'
+    },
+};
 
 export default function AutoFin() {
 
@@ -27,7 +78,7 @@ export default function AutoFin() {
     ]);
     const [transitionInput, setTransitionInput] = useState({ source: '', target: '', label: 'λ' });
     const [deleteMode, setDeleteMode] = useState(false);
-    const [inputs, setInputs] = useState([1]);
+    const [inputs,] = useState([1]);
 
     const myConfig = {
         nodeHighlightBehavior: true,
@@ -169,9 +220,8 @@ export default function AutoFin() {
                 <Tooltip title="Voltar"><Button style={styles.button}><ArrowBackIcon color="action"/></Button></Tooltip>
             </Link>
             
-            <p style={styles.text}>Autômato finito</p>
+            <p style={styles.text}>Autômato Finito</p>
             </header>
-            <Divider color="inherit" style={{ padding: '0.5px', width: '95%', alignSelf: 'center' }} />
             
             <div style={{ height: '20%' ,display: 'flex', justifyContent: 'space-between', padding: '0 2.5% 0 2.5%', alignItems: 'center' }}>
                 
@@ -183,7 +233,7 @@ export default function AutoFin() {
                             if(nodes.length > 0) setNodes([ ...nodes, { id: `q${parseInt(nodes[nodes.length - 1].id[1]) + 1}` }]);
                             else setNodes([{ id: 'q0', symbolType: 'diamond' }]);
                         }}
-                    >Adicionar estado</Button>
+                    >Adicionar Estado</Button>
                 </div>
                 <div style={{ display: 'flex', height: '90%' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
@@ -206,7 +256,8 @@ export default function AutoFin() {
                             onChange={e => setTransitionInput({ ...transitionInput, label: e.target.value })}
                         />
                     </div>
-                    <div style={{ paddingLeft: '10px', display: 'flex', alignItems: 'center' }}>
+                </div>
+                <div style={{ paddingLeft: '10px', display: 'flex', alignItems: 'center' }}>
                         <Button
                             variant='contained'
                             color='default'
@@ -217,7 +268,6 @@ export default function AutoFin() {
                             }}
                         >Adicionar transição</Button>
                     </div>
-                </div>
                 <div>
                     <Button
                         variant='contained'
@@ -228,32 +278,18 @@ export default function AutoFin() {
                     </Button>
                 </div>
             </div>
-            <Divider color="inherit" style={{ padding: '0.5px', width: '95%', alignSelf: 'center' }} />
             <div style={{ height: '80%', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <div style={{ width: '20%', height: '100%', display: 'flex', alignItems: 'center' }}>
                     <div style={{width: '100%', float: 'left' }}>
                         <div>
                             {inputs.map(() => (
                                 <div>
-                                    <input type="text" placeholder="String" onChange={(strInput) => validate(strInput)} onClick={(strInput) => {validate(strInput); strInput.target.placeholder = "";}} style={styles.input}/>
+                                    <label style={styles.text1}>Teste:</label>
+                                    <input type="text" placeholder="Teste" onChange={(strInput) => validate(strInput)} onClick={(strInput) => {validate(strInput); strInput.target.placeholder = "";}} style={styles.input}/>
                                 </div>
                             ))}
                         </div>
-                        <div style={styles.footer}>
-                            <Tooltip title="Adicionar">
-                                <Button style={styles.button} onClick={() => {
-                                    if(inputs.length < 7)
-                                        setInputs([...inputs, 1])
-                                    }} > <AddOutlinedIcon color="action"/> </Button >
-                            </Tooltip>
-                            <Tooltip title="Remover">
-                                <Button style={styles.button} onClick={() => {
-                                    if(inputs.length > 1)
-                                        setInputs(inputs.slice(0, inputs.length-1))
-                                    }} > <RemoveOutlinedIcon color="action" /> </Button >
-                            </Tooltip>
                         </div>
-                    </div>
                 </div>
                 <Graph
                     id='graph-id'
@@ -266,81 +302,17 @@ export default function AutoFin() {
                     onClickLink={onClickLink}
                 />
             </div>
-            <div style={styles.helper}>            
-                <HtmlTooltip placement="top"
-                    title={
-                    <React.Fragment>
-                        <Typography  color="inherit">Autômato finito </Typography>
-                        <b>{'Estado preto:'} </b>{'estado normal'} <br/>
-                        <b>{'Estado vermelho:'} </b>{'estado final'} <br/>
-                        <b>{'Losango:'} </b>{'estado inicial'} <br/>
-                        <br/> {'O estado inicial será o primeiro inserido.'} <br/>
-                        <br/>{'Em seguida, acrescente as strings para validar.'} <br/>
-                        {'Elas serão validadas quando são clicadas.'}                        
-                    </React.Fragment>
-                    }>
-                    <HelpOutlineIcon color="action" />
-                </HtmlTooltip>
+            <div style={styles.text1}>
+                Orientações:<br/>
+                Estados:<br/>
+                <b>{'Preto:'} </b>{'Estado normal'} <br/>
+                <b>{'Vermelho:'} </b>{'Estado final'} <br/>
+                <b>{'Losango:'} </b>{'Estado inicial'} <br/>
+                {'O estado inicial será o primeiro inserido.'} <br/>
+                {'Em seguida, acrescente as strings para validar.'} <br/>
+                {'Caso inserir uma transição usando um estado inexistente ocorrerá um erro, então certifique de que o estado existe.'} <br/>
+                {'Elas serão validadas quando são clicadas.'}
             </div>
-        </Container>
+            </Container>
     )
 }
-
-const HtmlTooltip = withStyles((theme) => ({
-    tooltip: {
-      backgroundColor: '#f5f5f9',
-      color: 'rgba(0, 0, 0, 0.87)',
-      maxWidth: 420,
-      fontSize: theme.typography.pxToRem(12),
-      border: '1px solid #dadde9',
-    },
-  }))(Tooltip);
-
-const styles = {
-    input: {
-        borderWidth: "3px", 
-        borderColor: "black",
-        borderStyle: "solid",
-        borderRadius: "5px",
-        height: "30px",
-        width: "250px",
-        outline: "0",
-        fontSize: "20px",
-        marginBottom: '10px'
-    },
-    helper: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'flex-end',
-        marginRight: '10px'
-    },
-    footer: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'center'
-    },
-    container: {
-        height: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center'
-    },
-    button: {
-        borderRadius: '5px',
-        height: '30px',
-        width: '20px',
-        transitionDuration: '0.5s',
-        marginRight: '10px'
-    },
-    header: {
-        paddingBottom: '15px',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between'
-    },
-    text: {
-        fontSize: '30px',
-        textAlign: 'center',
-        margin: '0'
-    },
-};
