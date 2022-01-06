@@ -4,6 +4,7 @@ import { Redirect } from 'react-router-dom';
 import Button from '@material-ui/core/Button/Button';
 import Container from '@material-ui/core/Container';
 
+// css da pagina inicial
 const styles = {
     container: {
         height: '100vh',
@@ -44,13 +45,14 @@ const styles = {
 export default function MainHome() {
 
     const [redirectFlag, setRedirectFlag] = useState(null);
-
+    // renderiza a pagina inicial
     const renderRedirect = () => {
         if(redirectFlag){
             return <Redirect to={`/${redirectFlag}`} />
         }
     }
-
+    // menu que retorna os botoes para escolha, em que cada um redireciona para 
+    // cada rota desejada
     return (
         <Container maxWidth='xl' style={styles.container}>
             <h2 style={styles.texto}>

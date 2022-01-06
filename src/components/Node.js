@@ -1,3 +1,5 @@
+// Arquivo que trata os nós dos automatos finitos
+// onde trata as coordenadas e a renderizacao do nó
 import React, { useState } from 'react';
 import { ArcherElement } from 'react-archer';
 
@@ -6,7 +8,8 @@ export default function Node(props) {
     const { index, x, y, update, relations } = props;
 
     const [coords, setCoords] = useState({x,y});
-
+    // ao arrastar um nó do grafo, as coordenadas dele são atualizadas e as anteriores
+    // são deletadas
     const onDrop = e => {
         const x = e.clientX;
         const y = e.clientY;
@@ -14,7 +17,7 @@ export default function Node(props) {
         setCoords(newCoords);
         update(index, x, y);
     }
-
+    // define o css/estilização de cada nó
     const styles = {
         node: {
             position: 'absolute',
@@ -42,7 +45,7 @@ export default function Node(props) {
                     sourceAnchor: 'left',
                     style: { strokeDasharray: '5,5' }
                 };
-                return relation;
+                return relation;    
             })}
             relations={[
                 {

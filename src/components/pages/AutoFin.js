@@ -1,3 +1,4 @@
+// Pagina da aplicacao que trata os automatos finitos
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Graph } from 'react-d3-graph';
@@ -7,7 +8,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Container from '@material-ui/core/Container/Container';
 
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-
+// css do automato finito
 const styles = {
     input: {
         borderWidth: "3px", 
@@ -66,12 +67,13 @@ const styles = {
 };
 
 export default function AutoFin() {
-
+    // cria cada no
     const [nodes, setNodes] = useState([
         { id: 'q0', symbolType: 'diamond' },
         { id: 'q1', color: 'red' },
         { id: 'q2', color: 'red' }
     ]);
+    // transicoes
     const [transitions, setTransitions] = useState([
         { source: 'q0', target: 'q1', label: 'a' },
         { source: 'q0', target: 'q2', label: 'b' },
@@ -97,7 +99,8 @@ export default function AutoFin() {
           renderLabel: true
         },
       };
-
+    
+    // atributo onclick
     const onClickNode = nodeId => {
         if(deleteMode){
             setTransitions(transitions.filter(t => t.source !== nodeId && t.target !== nodeId));
@@ -140,8 +143,7 @@ export default function AutoFin() {
             charCode += 1;
             return node;
         });
-
-
+        
         let grammar = [];
         for(let i=0 ; i < tempTransitions.length ; i++){
             let initial = tempTransitions[i].source;
@@ -218,24 +220,13 @@ export default function AutoFin() {
             <header style={styles.header}>
             <Link style={styles.button} to="/" width="20px" height="40px">
                 <Tooltip title="Voltar"><Button style={styles.button}><ArrowBackIcon color="action"/></Button></Tooltip>
-            </Link>
-            
+            </Link>           
             <p style={styles.text}>Autômato Finito</p>
             </header>
             
             <div style={{ height: '20%' ,display: 'flex', justifyContent: 'space-between', padding: '0 2.5% 0 2.5%', alignItems: 'center' }}>
-                
-                <div>
-                    <Button
-                        variant='contained'
-                        color='default'
-                        onClick={() => {
-                            if(nodes.length > 0) setNodes([ ...nodes, { id: `q${parseInt(nodes[nodes.length - 1].id[1]) + 1}` }]);
-                            else setNodes([{ id: 'q0', symbolType: 'diamond' }]);
-                        }}
-                    >Adicionar Estado</Button>
-                </div>
-                <div style={{ display: 'flex', height: '90%' }}>
+
+            <div style={{ display: 'flex', height: '90%' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                         <input
                             placeholder={'Nó inicial:'}
@@ -257,6 +248,17 @@ export default function AutoFin() {
                         />
                     </div>
                 </div>
+                <div>
+                    <Button
+                        variant='contained'
+                        color='default'
+                        onClick={() => {
+                            if(nodes.length > 0) setNodes([ ...nodes, { id: `q${parseInt(nodes[nodes.length - 1].id[1]) + 1}` }]);
+                            else setNodes([{ id: 'q0', symbolType: 'diamond' }]);
+                        }}
+                    >Adicionar Estado</Button>
+                </div>
+                
                 <div style={{ paddingLeft: '10px', display: 'flex', alignItems: 'center' }}>
                         <Button
                             variant='contained'
@@ -279,6 +281,16 @@ export default function AutoFin() {
                 </div>
             </div>
             <div style={{ height: '80%', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Graph
+                    id='graph-id'
+                    data={{
+                        nodes: nodes,
+                        links: transitions
+                    }}
+                    config={myConfig}
+                    onClickNode={onClickNode}
+                    onClickLink={onClickLink}
+                />
                 <div style={{ width: '20%', height: '100%', display: 'flex', alignItems: 'center' }}>
                     <div style={{width: '100%', float: 'left' }}>
                         <div>
@@ -291,16 +303,6 @@ export default function AutoFin() {
                         </div>
                         </div>
                 </div>
-                <Graph
-                    id='graph-id'
-                    data={{
-                        nodes: nodes,
-                        links: transitions
-                    }}
-                    config={myConfig}
-                    onClickNode={onClickNode}
-                    onClickLink={onClickLink}
-                />
             </div>
             <div style={styles.text1}>
                 Orientações:<br/>
@@ -311,6 +313,7 @@ export default function AutoFin() {
                 {'O estado inicial será o primeiro inserido.'} <br/>
                 {'Em seguida, acrescente as strings para validar.'} <br/>
                 {'Caso inserir uma transição usando um estado inexistente ocorrerá um erro, então certifique de que o estado existe.'} <br/>
+                {'O estado é criado automaticamente após clickar em adicionar estado, basta arrastar a tela do grafo.'} <br/>
                 {'Elas serão validadas quando são clicadas.'}
             </div>
             </Container>

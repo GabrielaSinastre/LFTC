@@ -1,15 +1,17 @@
+// Pagina que trata as gramaticas regulares
+// importar react e componentes
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import Container from '@material-ui/core/Container/Container';
 import Button from '@material-ui/core/Button/Button';
 import { ArrowForward } from '@material-ui/icons';
 import Tooltip from "@material-ui/core/Tooltip";
-import Divider from '@material-ui/core/Divider';
+import { Link } from 'react-router-dom';
+import Container from '@material-ui/core/Container/Container';
 
-import RemoveOutlinedIcon from '@material-ui/icons/RemoveOutlined';
 import AddOutlinedIcon from '@material-ui/icons/AddOutlined';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import RemoveOutlinedIcon from '@material-ui/icons/RemoveOutlined';
 
+// css das gramaticas regulares
 const styles = {
     container: {
         height: '100vh',
@@ -93,10 +95,11 @@ const styles = {
          fontSize: "20px"
       }
 }
-
+// tratar a entrada das strings
 const GrammarInput = ({grammar, leftSide, rightSide , cont}) => {
     const [inputs, setInputs] = useState([leftSide, rightSide]);
-    
+    // retorna os campos de entrada trantando as letras para maiusculas
+    // e os caracteres correspondentes a direita/esquerda, 
     return (
         <div style={styles.item}>
             <input 
@@ -147,14 +150,17 @@ export default function Gramatica() {
     let cont = 0;
     
     const [grammarInputs, setGrammarInputs] = useState([
+        // define os caracteres para tratar cada lado da gramatica
+        // direita/esquerda
         { leftSide: 'S', rightSide: 'aS | abB | B' },
         { leftSide: 'B', rightSide: 'cB | λ' }
     ]);
     const [inputs,] = useState([1]);
 
     const validate = strInput => {
-        const str = strInput.target.value;   
+        const str = strInput.target.value;  
         const arr = grammarInputs.map(input => {
+            // percorre atraves do map todos os caracteres de entrada
             const temp = { ...input };
             temp.rightSide = temp.rightSide.replace(/\s+/g, '').split('|');
             return temp;
@@ -163,6 +169,8 @@ export default function Gramatica() {
         let type = '';
         arr.forEach(row => {
             row.rightSide.forEach(rule => {
+                // trata cada condicao de acordo com as regras das gramaticas
+                // regulres, tratando dos caracteres a direita e a esquerda
                 if(rule.length > 1)
                 {
                     if(rule.replace(/[^A-Z]/g, '').length > 1){
@@ -183,8 +191,6 @@ export default function Gramatica() {
             })
         });
 
-        //console.log(res);
-        
         if(res.filter(s => s === 'Right').length === res.length){
             type = 'Right';
         } else if(res.filter(s => s === 'Left').length === res.length){
@@ -192,18 +198,17 @@ export default function Gramatica() {
         } else {
             type = 'Invalid';
         };
-        //console.log('String: ', str);
         
         if(type === 'Right'){
-            //console.log('Grammar type: ', type);
-            
             for(let rule of arr[0].rightSide)
             {
+                // se esta tudo certo com a gramatica, a borda recebe a cor verde
                 if(matchD(str, rule, arr)){
                     strInput.target.style.borderColor = "Green";
                     return;
                 };
             }
+            // senao ela recebe a cor vermelha ate estar correta
             strInput.target.style.borderColor = "Red";
         } else if(type === 'Left'){
             //console.log('Grammar type: ', type);
@@ -217,31 +222,36 @@ export default function Gramatica() {
             }
             strInput.target.style.borderColor = "Red    ";
         } else {
-            //console.log('Error: Invalid Grammar type! Accepted grammars: GLD, GLUD, GLE, GLUE.');
+            // caso a gramatica inserida como entrada nao corresponda as gramaticas
+            // existentes que são aceitas, o return acontece
             alert("Gramática inválida! Aceita apenas GLD, GLUD, GLE e GLUE!");
             return;
         }
         return;
     };
 
+    // essa funcao corresponde a cada caso que pode acontecer com os caracteres,
+    // usando o tamanho da rule e da str como parametro
     const matchD = (str, rule, arr) => {
-        //console.log('Rule: ', rule);
         if(rule.length - 1 > str.length) return false;
 
         const nextRule = rule[rule.length - 1];
-        //console.log('  Next rule: ', nextRule);
 
-        //Verificando caractere vazio
+        // caso o caractere esteja vazio e o tamanho da regra é igual a str, retorna true pois a entrada é válida
         if(nextRule === 'λ' && (rule.slice(0, rule.length - 1) === str && rule.slice(0, rule.length - 1).length === str.length)) return true;
         
+        // se a próxima regra é igual e ela mesma e a str é igual a regra, retorna true para a validação
         if(nextRule === nextRule.toLowerCase()) return rule === str;
         
-        //Verificando se pode continuar: só vai continuar se aB, ababaA = a, ababa. Quando for B, deve seguir para ver as outras regras dele
+        // Verificar se a gramatica esta correta e pode continuar as insercoes
+        // nesse caso, ela precisa ser:
+        // aB, ababaA = a, ababa.
+        // quando for B, deve seguir para ver as outras regras dele
         if(rule.length > 1 && rule.slice(0, rule.length - 1) !== str.slice(0, rule.length - 1)) return false;
 
         const rules = arr.find(row => row.leftSide === nextRule);
-        //console.log('  Rules: ', rules.rightSide);
 
+        // se rules for null, retorna false
         if(!rules) return false;
         for(let r of rules.rightSide)
         {
@@ -250,24 +260,24 @@ export default function Gramatica() {
             }
         }
     };
-
+    // analisar gramática a esquerda GLUE
+    // usando a mesma logica utilizada acima mas lendo da direita para esquerda
     const matchE = (str, rule, arr) => {
-        //console.log('Rule: ', rule);
         if(rule.length - 1 > str.length) return false;
 
         const nextRule = rule[0];
-        //console.log('  NextRule: ', nextRule);
-
-        //Verificando caractere vazio
+        
+        // Verificar se o caractere é vazio
         if(nextRule === 'λ' && (rule.slice(1, rule.length) === str && rule.slice(1, rule.length).length === str.length)) return true;
         
         if(nextRule === nextRule.toLowerCase()) return rule === str;
 
-        //Verificando se pode continuar: só vai continuar se aB, ababaA = a, ababa. Quando for B, deve seguir para ver as outras regras dele
+        // Verificar se pode continuar:
+        // vai continuar se aB, ababaA = a, ababa.
+        // no caso uando for B, deve seguir para ver as outras regras dele
         if(rule.length > 1 && rule.slice(1, rule.length) !== str.slice(str.length - (rule.length-1), str.length)) return false;
         
         const rules = arr.find(row => row.leftSide === nextRule);
-        //console.log('  Rules: ', rules.rightSide);
 
         if(!rules) return false;
         for(let r of rules.rightSide)
@@ -277,7 +287,7 @@ export default function Gramatica() {
             }
         }
     }
-  
+    // retorna os campos de entrada e trata os splits
     return (
         <Container maxWidth='lg' style={styles.container}>
             <header style={styles.header}>
@@ -312,8 +322,6 @@ export default function Gramatica() {
                     </div>
                 </div>
 
-                <Divider color="inherit" orientation="vertical" style={{ padding: '0.5px', height: '100%', float: 'left' }} />
-
                 <div style={{width: '45%', float: 'left' }}>
                     <div style={styles.main}>
                         {inputs.map(() => (
@@ -335,4 +343,3 @@ export default function Gramatica() {
         </Container>
     )
 }
-

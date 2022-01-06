@@ -6,6 +6,7 @@ import Button from '@material-ui/core/Button/Button';
 import Tooltip from "@material-ui/core/Tooltip";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
+// css da pagina
 const styles = {
     input: {
         borderWidth: "3px", 
@@ -75,7 +76,9 @@ export default function Regex() {
     const validar = e => {
         const regex = new RegExp(userInput);
         const string = e.target.value;        
-                
+        // verifica se a string corresponde as regras que foram incluidas
+        // se for correspondente, a caixinha permanece verde
+        // se não ela recebe a cor vermelha
         if(regex.exec(string)){
              e.target.style.borderColor = "green";
         } else {
@@ -83,6 +86,10 @@ export default function Regex() {
         }
     }
 
+    // retornar a renderizacao da pagina, onde ha os campos para inserção da expressao
+    // regular e para testar se o texto inserido corresponde as regras
+    // alem de retornar um container com as orientacoes das regras permitidas
+    // para os testes
     return (
         <Container maxWidth='lg' style={styles.container}>
             <header style={styles.header}>
